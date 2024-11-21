@@ -52,16 +52,15 @@ import { useRelay } from '@/hooks/useRelay';
 
 // Mock data
 const TICKET = {
-  title: 'Titulo del evento',
-  subtitle: 'Subtitulo del evento',
+  title: '1 Satoshi = 1 Peso',
+  subtitle: 'Venite a festejar a La Crypta',
   description: [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-    'Item 6',
-    'Item 7',
+    'Barra completa',
+    'Parrila',
+    'Música',
+    'Presentaciones',
+    'Bitcoiners',
+    'Libertarios',
   ],
   imageUrl: 'https://placehold.co/400',
   value: parseInt(process.env.NEXT_TICKET_PRICE_ARS!),

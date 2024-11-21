@@ -25,7 +25,7 @@ class SESClient implements SESClientInterface {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tu Entrada para el Cumpleaños de La Crypta</title>
+        <title>Tu Entrada para el 1 Satoshi = 1 Peso</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -41,8 +41,8 @@ class SESClient implements SESClientInterface {
             background-color: #FFFFFF;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #C2F76C;
-            border: 1px solid #C2F76C;
+            box-shadow: 0 0 10px #444444;
+            border: 1px solid #444444;
           }
 
           .logo-container {
@@ -52,8 +52,8 @@ class SESClient implements SESClientInterface {
             margin: 0 auto;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #C2F76C;
-            border: 1px solid #C2F76C;
+            box-shadow: 0 0 10px #444444;
+            border: 1px solid #444444;
           }
 
           .logo-container img {
@@ -64,7 +64,7 @@ class SESClient implements SESClientInterface {
           }
 
           h1 {
-            color: #C2F76C;
+            color: #444444;
             text-align: center;
           }
 
@@ -83,7 +83,7 @@ class SESClient implements SESClientInterface {
             background-color: #FFFFFF;
             padding: 10px;
             border-radius: 8px;
-            border: 2px solid #C2F76C;
+            border: 2px solid #444444;
           }
 
           .footer {
@@ -94,7 +94,7 @@ class SESClient implements SESClientInterface {
           }
 
           .footer a {
-            color: #C2F76C;
+            color: #444444;
             text-decoration: none;
             margin: 0 10px;
           }
@@ -102,7 +102,7 @@ class SESClient implements SESClientInterface {
           .divider {
             border: none;
             height: 1px;
-            background-color: #C2F76C;
+            background-color: #444444;
             margin: 20px 0;
             /* Espacio arriba y abajo de la línea */
           }
@@ -113,8 +113,8 @@ class SESClient implements SESClientInterface {
           <div class="logo-container">
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
-          <h1>Tu entrada para el Cumpleaños de La Crypta</h1>
-          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>⏰ A partir de las 21:00 hs. </p>
+          <h1>Tu entrada para el 1 Satoshi = 1 Peso</h1>
+          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Viernes 29 de Noviembre<br>⏰ A partir de las 21:00 hs.</p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
           </div>
@@ -140,7 +140,7 @@ class SESClient implements SESClientInterface {
       Content: {
         Simple: {
           Subject: {
-            Data: 'Tu entrada para el Cumpleaños de La Crypta',
+            Data: 'Tu entrada para 1 Satoshi = 1 Peso',
           },
           Body: {
             Html: {
@@ -179,8 +179,8 @@ class SESClient implements SESClientInterface {
             background-color: #FFFFFF;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #C2F76C;
-            border: 1px solid #C2F76C;
+            box-shadow: 0 0 10px #444444;
+            border: 1px solid #444444;
           }
 
           .logo-container {
@@ -190,8 +190,8 @@ class SESClient implements SESClientInterface {
             margin: 0 auto;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #C2F76C;
-            border: 1px solid #C2F76C;
+            box-shadow: 0 0 10px #444444;
+            border: 1px solid #444444;
           }
 
           .logo-container img {
@@ -202,7 +202,7 @@ class SESClient implements SESClientInterface {
           }
 
           h1 {
-            color: #C2F76C;
+            color: #444444;
             text-align: center;
           }
 
@@ -221,7 +221,7 @@ class SESClient implements SESClientInterface {
             background-color: #FFFFFF;
             padding: 10px;
             border-radius: 8px;
-            border: 2px solid #C2F76C;
+            border: 2px solid #444444;
           }
 
           .footer {
@@ -232,7 +232,7 @@ class SESClient implements SESClientInterface {
           }
 
           .footer a {
-            color: #C2F76C;
+            color: #444444;
             text-decoration: none;
             margin: 0 10px;
           }
@@ -244,7 +244,7 @@ class SESClient implements SESClientInterface {
           .divider {
             border: none;
             height: 1px;
-            background-color: #C2F76C;
+            background-color: #444444;
             margin: 20px 0;
           }
         </style>
