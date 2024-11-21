@@ -10,12 +10,13 @@
     "dev": "next dev",
     "build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "exec prettier . --write"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.633.0",
-    "@lawallet/react": "^0.2.16",
-    "@prisma/client": "5.18.0",
+    "@lawallet/react": "^0.2.49",
+    "@prisma/client": "5.19.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.1.0",
@@ -43,8 +44,10 @@
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.419.0",
     "next": "14.2.5",
-    "nostr-tools": "npm:@lawallet/nostr-tools@^1.17.0",
-    "qrcode.react": "^3.1.0",
+    "nostr-tools": "npm:@lawallet/nostr-tools@2.7.2",
+    "prettier": "^3.3.3",
+    "qr-scanner": "^1.4.2",
+    "qrcode.react": "^4.0.1",
     "react": "^18",
     "react-canvas-confetti": "^2.0.7",
     "react-dom": "^18",
@@ -61,7 +64,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
-    "prisma": "^5.18.0",
+    "prisma": "^5.19.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },

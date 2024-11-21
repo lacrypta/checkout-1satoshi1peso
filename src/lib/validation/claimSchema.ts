@@ -1,9 +1,10 @@
-import { Event, validateEvent, verifyEvent } from "nostr-tools";
-import { z } from "zod";
+import { Event, validateEvent, verifyEvent } from 'nostr-tools';
+import { z } from 'zod';
+// import { claimEventSchema } from './nostrEventSchema';
 
 const tagSchema = z.tuple([z.string(), z.string()]);
 
-const descriptionSchema = z.string().refine(
+const orderDescriptionSchema = z.string().refine(
   (value) => {
     try {
       JSON.parse(value);
@@ -12,12 +13,12 @@ const descriptionSchema = z.string().refine(
       return false;
     }
   },
-  { message: "Invalid JSON in description tag" }
+  { message: 'Invalid JSON in description tag' }
 );
 
-export const claimSchema = z.object({
-  fullname: z.string().min(3, { message: "Fullname is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
+export const orderClaimSchema = z.object({
+  fullname: z.string().min(3, { message: 'Fullname is required' }),
+  email: z.string().email({ message: 'Invalid email address' }),
   zapReceipt: z.object({
     kind: z.literal(9735),
     tags: z
@@ -26,33 +27,35 @@ export const claimSchema = z.object({
         (tags) => {
           const tagNames = tags.map((tag) => tag[0]);
           return (
-            tagNames.includes("e") &&
-            tagNames.includes("bolt11") &&
-            tagNames.includes("description") &&
-            tagNames.includes("p")
+            tagNames.includes('e') &&
+            tagNames.includes('bolt11') &&
+            tagNames.includes('description') &&
+            tagNames.includes('p')
           );
         },
-        { message: "Must include tags e, bolt11, description and p" }
+        { message: 'Must include tags e, bolt11, description and p' }
       )
       .refine(
         (tags) => {
-          const descriptionTag = tags.find((tag) => tag[0] === "description");
+          const descriptionTag = tags.find((tag) => tag[0] === 'description');
           return descriptionTag
-            ? descriptionSchema.safeParse(descriptionTag[1]).success
+            ? orderDescriptionSchema.safeParse(descriptionTag[1]).success
             : false;
         },
-        { message: "Description tag must contain valid JSON" }
+        { message: 'Description tag must contain valid JSON' }
       ),
     content: z.string(),
-    created_at: z.number().int().positive({ message: "Invalid timestamp" }),
-    pubkey: z.string().length(64, { message: "Invalid public key" }),
-    id: z.string().length(64, { message: "Invalid ID" }),
-    sig: z.string().length(128, { message: "Invalid signature" }),
+    created_at: z.number().int().positive({ message: 'Invalid timestamp' }),
+    pubkey: z.string().length(64, { message: 'Invalid public key' }),
+    id: z.string().length(64, { message: 'Invalid ID' }),
+    sig: z.string().length(128, { message: 'Invalid signature' }),
   }),
+  code: z.string().optional(),
+  // claimEvent: claimEventSchema,
 });
 
 export function validateZapReceiptEmitter(zapEvent: Event): boolean {
-  if (zapEvent.tags.find((tag) => tag[0] === "p")![1] !== zapEvent.pubkey) {
+  if (zapEvent.tags.find((tag) => tag[0] === 'p')![1] !== zapEvent.pubkey) {
     return false;
   }
 
@@ -64,7 +67,7 @@ export function validateZapRequest(
   signerPublicKey: string
 ): boolean {
   const zapRequest: Event = JSON.parse(
-    zapEvent.tags.find((tag) => tag[0] === "description")![1]
+    zapEvent.tags.find((tag) => tag[0] === 'description')![1]
   );
 
   const isValidEvent = validateEvent(zapRequest);
@@ -85,3 +88,26 @@ export function validateZapRequest(
 
   return true;
 }
+
+// export function validateClaimEvent(
+//   claimEvent: Event,
+//   adminPublicKey: string
+// ): boolean {
+//   const isValidEvent = validateEvent(claimEvent);
+
+//   if (!isValidEvent) {
+//     return false;
+//   }
+
+//   const isVerifyEvent = verifyEvent(claimEvent);
+
+//   if (!isVerifyEvent) {
+//     return false;
+//   }
+
+//   if (claimEvent.pubkey !== adminPublicKey) {
+//     return false;
+//   }
+
+//   return true;
+// }

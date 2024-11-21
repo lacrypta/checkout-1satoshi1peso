@@ -13,21 +13,18 @@ import {
   DropdownMenuSeparator,
 } from '../ui/dropdown-menu';
 
-export type OrderInfo = {
+export type TicketInfo = {
   user: {
     fullname: string;
     email: string;
   };
   ticketId: string;
-  qty: number;
-  totalMiliSats: number;
-  paid: boolean;
   checkIn: boolean;
 };
 
 export const createColumns = (
   handleCheckIn: (ticketId: string) => void
-): ColumnDef<OrderInfo>[] => [
+): ColumnDef<TicketInfo>[] => [
   {
     accessorKey: 'ticketId',
     header: 'Ticket ID',
@@ -63,17 +60,6 @@ export const createColumns = (
 
       return emailA.localeCompare(emailB);
     },
-  },
-  {
-    accessorKey: 'qty',
-    header: 'Quantity',
-  },
-  {
-    accessorKey: 'totalMiliSats',
-    header: 'Total (sats)',
-    cell: ({ row }) => (
-      <span>{Math.round(row.original.totalMiliSats / 1000)}</span>
-    ),
   },
   {
     accessorKey: 'checkIn',

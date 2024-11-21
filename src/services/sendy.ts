@@ -36,6 +36,18 @@ class SendyClient implements SendyClientInterface {
       return responseF;
     }
 
+    if (
+      !subscriptionStatus.success &&
+      subscriptionStatus.message !== 'Email does not exist in list'
+    ) {
+      const responseF: SendyResponse = {
+        success: false,
+        message: 'Email bounced, try with another.',
+      };
+
+      return responseF;
+    }
+
     // Create form data
     const formData = new URLSearchParams();
 
@@ -157,6 +169,6 @@ class SendyClient implements SendyClientInterface {
 }
 
 export const sendy: SendyClientInterface = new SendyClient(
-  process.env.SENDY_URL!,
-  process.env.SENDY_KEY!
+  process.env.NEXT_SENDY_API_URL!,
+  process.env.NEXT_SENDY_API_KEY!
 );

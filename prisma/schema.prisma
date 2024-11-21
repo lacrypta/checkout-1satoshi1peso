@@ -12,22 +12,49 @@ datasource db {
 }
 
 model User {
-    id       String  @id @default(uuid())
+    id       String @id @default(uuid())
     fullname String
-    email    String  @unique
-    orders   Order[]
+    email    String @unique
+
+    // Relations
+    orders  Order[]
+    tickets Ticket[]
 }
 
+// Order is a collection of tickets with information about the payment
 model Order {
-    id            String  @id @default(uuid())
-    referenceId   String  @unique // for nostr event
-    ticketId      String? @unique // for check in
-    qty           Int
-    totalMiliSats Int
-    paid          Boolean @default(false)
-    checkIn       Boolean @default(false)
-    zapReceiptId  String? @unique
-    userId        String
+    id               String  @id @default(uuid())
+    eventReferenceId String  @unique // for nostr event
+    ticketQuantity   Int
+    totalMiliSats    Int
+    paid             Boolean @default(false)
+    zapReceiptId     String? @unique
+
+    // Relations
+    userId  String?
+    tickets Ticket[]
 
     User User? @relation(fields: [userId], references: [id])
+}
+
+// Ticket is a single ticket for an event, only emmit when the order is paid
+model Ticket {
+    id       String  @id @default(uuid())
+    ticketId String? @unique // for check in
+    checkIn  Boolean @default(false)
+
+    // Relations
+    userId  String
+    orderId String?
+
+    User  User   @relation(fields: [userId], references: [id])
+    Order Order? @relation(fields: [orderId], references: [id])
+}
+
+model Code {
+    id       String  @id @default(uuid())
+    code     String  @unique
+    comment  String?
+    discount Int
+    used     Int     @default(0)
 }

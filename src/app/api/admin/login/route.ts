@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
     const { publicKey } = await req.json();
 
     // Authentication
-    if (publicKey !== process.env.ADMIN_KEY) {
+    if (publicKey !== process.env.NEXT_ADMIN_PUBLIC_KEY) {
       throw new AppError('Unauthorized', 401);
     }
 
-    return NextResponse.json({ status: true, data: 'Authorized' });
+    return NextResponse.json({ status: true, data: { message: 'Authorized' } });
   } catch (error: any) {
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },

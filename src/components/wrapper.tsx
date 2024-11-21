@@ -1,10 +1,12 @@
 'use client';
-import { LaWalletConfig } from '@lawallet/react';
+import { createConfig, LaWalletConfig } from '@lawallet/react';
+
+const config = createConfig({ relaysList: ['wss://relay.lawallet.ar'] });
 
 export default function AppWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <LaWalletConfig>{children}</LaWalletConfig>;
+  return <LaWalletConfig config={config}>{children}</LaWalletConfig>;
 }

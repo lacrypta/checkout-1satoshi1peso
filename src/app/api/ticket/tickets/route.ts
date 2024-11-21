@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { AppError } from '@/lib/errors/appError';
 import { NextRequest, NextResponse } from 'next/server';
-import { contentSchema, orderEventSchema } from '@/lib/validation/ordersSchema';
-import { validateOrderEvent } from '@/lib/validation/ordersSchema';
+import {
+  ticketsEventContentSchema,
+  ticketsEventSchema,
+} from '@/lib/validation/nostrEventSchema';
+import { validateTicketEvent } from '@/lib/validation/nostrEventSchema';
 
 const prisma = new PrismaClient();
 
@@ -19,22 +22,22 @@ export async function POST(req: NextRequest) {
     }
 
     // Zod
-    const result = orderEventSchema.safeParse(authEvent);
+    const result = ticketsEventSchema.safeParse(authEvent);
 
     if (!result.success) {
       throw new AppError(result.error.errors[0].message, 400);
     }
 
     // Event validation
-    const adminPublicKey = process.env.ADMIN_KEY!;
+    const adminPublicKey = process.env.NEXT_ADMIN_PUBLIC_KEY!;
 
-    const isValidOrderEvent = validateOrderEvent(result.data, adminPublicKey);
+    const isValidOrderEvent = validateTicketEvent(result.data, adminPublicKey);
 
     if (!isValidOrderEvent) {
       throw new AppError('Invalid order event', 403);
     }
 
-    const contentResult = contentSchema.safeParse(
+    const contentResult = ticketsEventContentSchema.safeParse(
       JSON.parse(result.data.content)
     );
 
@@ -45,8 +48,8 @@ export async function POST(req: NextRequest) {
     const { limit, checked_in, ticket_id, email } = contentResult.data;
 
     // Prisma
+    // Get tickets
     const whereClause: any = {
-      paid: true,
       ...(checked_in !== undefined && { checkIn: checked_in }),
       ...(ticket_id && { ticketId: ticket_id }),
       ...(email && {
@@ -56,7 +59,7 @@ export async function POST(req: NextRequest) {
       }),
     };
 
-    const orders = await prisma.order.findMany({
+    const tickets = await prisma.ticket.findMany({
       take: limit || undefined,
       where: whereClause,
       include: {
@@ -69,21 +72,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const formattedOrders = orders.map((order) => ({
+    const formattedTickets = tickets.map((ticket) => ({
       user: {
-        fullname: order.User?.fullname,
-        email: order.User?.email,
+        fullname: ticket.User?.fullname,
+        email: ticket.User?.email,
       },
-      ticketId: order.ticketId,
-      qty: order.qty,
-      totalMiliSats: order.totalMiliSats,
-      paid: order.paid,
-      checkIn: order.checkIn,
+      ticketId: ticket.ticketId,
+      checkIn: ticket.checkIn,
     }));
 
     return NextResponse.json({
       status: true,
-      data: formattedOrders,
+      data: formattedTickets,
     });
   } catch (error: any) {
     return NextResponse.json(

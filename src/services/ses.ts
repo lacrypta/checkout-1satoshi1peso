@@ -25,7 +25,7 @@ class SESClient implements SESClientInterface {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tu Entrada para el Cowork</title>
+        <title>Tu Entrada para el Cumpleaños de La Crypta</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -113,12 +113,13 @@ class SESClient implements SESClientInterface {
           <div class="logo-container">
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
-          <h1>Tu entrada para el Cowork</h1>
-          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>⏰ A partir de las 10:00 hs. </p>
+          <h1>Tu entrada para el Cumpleaños de La Crypta</h1>
+          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>⏰ A partir de las 21:00 hs. </p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
           </div>
           <p style="text-align:center;">Presentá este QR en la entrada.</p>
+          <p style="text-align:center; color:gray;">ID: ${orderId}</p>
           <div class="footer">
             <hr class="divider">
             <p>Seguinos en nuestras redes:</p>
@@ -139,7 +140,7 @@ class SESClient implements SESClientInterface {
       Content: {
         Simple: {
           Subject: {
-            Data: 'Entrada para el Cowork de La Crypta',
+            Data: 'Tu entrada para el Cumpleaños de La Crypta',
           },
           Body: {
             Html: {
@@ -295,6 +296,6 @@ class SESClient implements SESClientInterface {
 }
 
 export const ses: SESClientInterface = new SESClient(
-  process.env.AWS_KEY_ID!,
-  process.env.AWS_SECRET_KEY!
+  process.env.NEXT_AWS_ACCESS_KEY_ID!,
+  process.env.NEXT_AWS_SECRET_ACCESS_KEY!
 );

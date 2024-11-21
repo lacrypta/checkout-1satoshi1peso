@@ -1,4 +1,4 @@
-import { Event, EventTemplate, finalizeEvent, getPublicKey } from 'nostr-tools';
+import { Event, EventTemplate, finalizeEvent } from 'nostr-tools';
 
 function generateZapRequest(
   orderId: string,
@@ -38,4 +38,4 @@ function convertEvent(event: any): Event {
   };
 }
 
-export { generateZapRequest, convertEvent };
+export { convertEvent, generateZapRequest };

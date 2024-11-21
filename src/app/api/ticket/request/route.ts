@@ -1,18 +1,20 @@
+import { AppError } from '@/lib/errors/appError';
+import { getCodeDiscountBack } from '@/lib/utils/codes';
+import { generateZapRequest } from '@/lib/utils/nostr';
+import { calculateTicketPrice } from '@/lib/utils/price';
+import { createOrder, CreateOrderResponse } from '@/lib/utils/prisma';
+import { requestOrderSchema } from '@/lib/validation/requestOrderSchema';
+import { generateInvoice, getLnurlpFromWalias } from '@/services/ln';
+import { sendy } from '@/services/sendy';
+import { ses } from '@/services/ses';
 import { NextRequest, NextResponse } from 'next/server';
 import { Event } from 'nostr-tools';
-import { generateZapRequest } from '@/lib/utils/nostr';
-import { generateInvoice, getLnurlpFromWalias } from '@/services/ln';
-import { createOrder, CreateOrderResponse } from '@/lib/utils/prisma';
-import { ticketSchema } from '@/lib/validation/ticketSchema';
-import { ses } from '@/services/ses';
-import { AppError } from '@/lib/errors/appError';
-import { sendy } from '@/services/sendy';
 
 interface RequestTicketResponse {
   pr: string;
-  orderReferenceId: string;
-  qty: number;
-  totalMiliSats: number;
+  verify: string;
+  eventReferenceId: string;
+  code: string | null;
 }
 
 export async function POST(req: NextRequest) {
@@ -24,18 +26,35 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Zod
-    const result = ticketSchema.safeParse(body);
+    const result = requestOrderSchema.safeParse(body);
 
     if (!result.success) {
       throw new AppError(result.error.errors[0].message, 400);
     }
 
-    const { fullname, email, qty, newsletter } = result.data;
+    const { fullname, email, ticketQuantity, newsletter, code } = result.data;
 
     // Prisma Create order and user (if not created before) in prisma
     let orderResponse: CreateOrderResponse;
+    // Calculate ticket price
+    const discountMultiple = code
+      ? await getCodeDiscountBack(code.toLowerCase())
+      : 1;
+    const ticketPriceArs = parseInt(
+      (parseInt(process.env.NEXT_TICKET_PRICE_ARS!) * discountMultiple).toFixed(
+        0
+      )
+    );
+    const totalMiliSats =
+      (await calculateTicketPrice(ticketQuantity, ticketPriceArs)) * 1000;
+
     try {
-      orderResponse = await createOrder(fullname, email, qty);
+      orderResponse = await createOrder(
+        fullname,
+        email,
+        ticketQuantity,
+        totalMiliSats
+      );
     } catch (error: any) {
       throw new AppError(`Failed to create order.`, 500);
     }
@@ -46,22 +65,27 @@ export async function POST(req: NextRequest) {
       const sendyResponse = await sendy.subscribe({
         name: fullname,
         email,
-        listId: process.env.SENDY_LIST!,
+        listId: process.env.NEXT_SENDY_LIST_ID!,
       });
 
-      if (!sendyResponse.success) {
-        throw new AppError(
-          `Subscribe to newsletter failed. ${sendyResponse.message}`,
-          404
-        );
-      }
-    }
+      if (sendyResponse.message !== 'Already subscribed') {
+        if (!sendyResponse.success) {
+          throw new AppError(
+            `Subscribe to newsletter failed. ${sendyResponse.message}`,
+            404
+          );
+        }
 
-    // AWS SES
-    try {
-      await ses.sendEmailNewsletter(email);
-    } catch (error: any) {
-      throw new AppError(error.message || 'Failed to send email via SES', 500);
+        // AWS SES
+        try {
+          await ses.sendEmailNewsletter(email);
+        } catch (error: any) {
+          throw new AppError(
+            error.message || 'Failed to send email via SES',
+            500
+          );
+        }
+      }
     }
 
     // Lnurlp
@@ -77,8 +101,8 @@ export async function POST(req: NextRequest) {
     let zapRequest: Event;
     try {
       zapRequest = generateZapRequest(
-        orderResponse.referenceId,
-        orderResponse.totalMiliSats,
+        orderResponse.eventReferenceId,
+        totalMiliSats,
         lnurlp.nostrPubkey
       );
     } catch (error: any) {
@@ -86,24 +110,59 @@ export async function POST(req: NextRequest) {
     }
 
     // Invoice
-    let invoice: string;
+    let pr: string;
+    let verify: string;
     try {
-      invoice = await generateInvoice(
+      ({ pr, verify } = await generateInvoice(
         lnurlp.callback,
-        orderResponse.totalMiliSats,
+        totalMiliSats,
         zapRequest
-      );
+      ));
     } catch (error: any) {
       throw new AppError('Failed to generate Invoice', 500);
     }
 
     // Response
     const response: RequestTicketResponse = {
-      pr: invoice,
-      orderReferenceId: orderResponse.referenceId,
-      qty,
-      totalMiliSats: orderResponse.totalMiliSats,
+      pr: pr,
+      verify,
+      eventReferenceId: orderResponse.eventReferenceId,
+      code: code || null,
     };
+
+    // // New logic to connect to relay and listen for payment events
+    // const relay = await generateRelay({
+    //   relayUrl: 'wss://relay.lawallet.ar',
+    //   filters: [{ kinds: [9735], '#e': [orderResponse.eventReferenceId] }],
+    //   onEventCallback: async (event) => {
+    //     console.log('Payment confirmed and processed in backend.');
+
+    //     // Call the claim API to claim the payment
+    //     try {
+    //       const claimResponse = await fetch(
+    //         `${process.env.NEXT_PUBLIC_API_URL}/api/ticket/claim`,
+    //         {
+    //           method: 'POST',
+    //           headers: {
+    //             'Content-Type': 'application/json',
+    //           },
+    //           body: JSON.stringify({
+    //             fullname,
+    //             email,
+    //             zapReceipt: event, // Assuming the event contains the zap receipt
+    //           }),
+    //         }
+    //       );
+
+    //       const claimData = await claimResponse.json();
+    //       if (!claimData.status) {
+    //         console.error('Failed to claim payment:', claimData.errors);
+    //       }
+    //     } catch (error) {
+    //       console.error('Error calling claim API:', error);
+    //     }
+    //   },
+    // });
 
     return NextResponse.json({
       status: true,

@@ -1,11 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
-const urlYadio = "https://api.yadio.io/exrates/ARS";
+const urlYadio = 'https://api.yadio.io/exrates/ARS';
+let lastFetchTime: number | null = null;
+let cachedBtcPrice: number | null = null;
+const FETCH_INTERVAL = 60 * 1000;
 
 async function getBtcPrice(): Promise<number> {
-  return await axios.get(urlYadio).then((res) => {
-    return res.data.BTC;
-  });
+  const currentTime = Date.now();
+
+  if (
+    lastFetchTime &&
+    currentTime - lastFetchTime < FETCH_INTERVAL &&
+    cachedBtcPrice !== null
+  ) {
+    console.log('Using cached BTC price...');
+    return cachedBtcPrice;
+  }
+
+  try {
+    const res = await axios.get(urlYadio);
+    const btcPrice = res.data.BTC;
+
+    lastFetchTime = currentTime;
+    cachedBtcPrice = btcPrice;
+
+    console.log('Fetching BTC price...');
+    return btcPrice;
+  } catch (error) {
+    throw new Error('Could not fetch BTC price');
+  }
 }
 
 async function convertArsToMiliSats(priceArs: number): Promise<number> {
@@ -16,11 +39,12 @@ async function calculateTicketPrice(
   qty: number,
   ticketPriceArs: number
 ): Promise<number> {
-  const ticketPriceSats: number = await convertArsToMiliSats(ticketPriceArs);
+  const ticketPriceSats: number =
+    (await convertArsToMiliSats(ticketPriceArs)) / 1000;
 
-  const totalTicketPriceSats: number = qty * ticketPriceSats;
+  const totalTicketPrice: number = qty * ticketPriceSats;
 
-  return totalTicketPriceSats;
+  return totalTicketPrice;
 }
 
 export { calculateTicketPrice };

@@ -1,20 +1,16 @@
-import { ses } from '@/services/ses';
-import { updateOrder, updateOrderResponse } from '../../../../lib/utils/prisma';
-import { NextRequest, NextResponse } from 'next/server';
-import { getPublicKey, validateEvent } from 'nostr-tools';
+import { AppError } from '@/lib/errors/appError';
+import { updatePaidOrder, UpdatePaidOrderResponse } from '@/lib/utils/prisma';
 import {
-  claimSchema,
+  orderClaimSchema,
   validateZapReceiptEmitter,
   validateZapRequest,
 } from '@/lib/validation/claimSchema';
-import { AppError } from '@/lib/errors/appError';
+import { ses } from '@/services/ses';
+import { NextRequest, NextResponse } from 'next/server';
+import { getPublicKey, validateEvent } from 'nostr-tools';
 
-interface TicketClaimResponse {
-  fullname: string;
-  email: string;
-  orderReferenceId: string;
-  qty: number;
-  totalMiliSats: number;
+interface OrderClaimResponse {
+  claim: boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -26,13 +22,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Zod
-    const result = claimSchema.safeParse(body);
+    const result = orderClaimSchema.safeParse(body);
 
     if (!result.success) {
       throw new AppError(result.error.errors[0].message, 400);
     }
 
-    const { fullname, email, zapReceipt } = result.data;
+    const { fullname, email, zapReceipt, code } = result.data;
 
     // Validate zapReceipt
     const isValidEvent = validateEvent(zapReceipt);
@@ -47,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     // Validate zapRequest
     const publicKey = getPublicKey(
-      Uint8Array.from(Buffer.from(process.env.SIGNER_KEY!, 'hex'))
+      Uint8Array.from(Buffer.from(process.env.NEXT_SIGNER_PRIVATE_KEY!, 'hex'))
     );
     const isValidZapRequest = validateZapRequest(zapReceipt, publicKey);
     if (!isValidZapRequest) {
@@ -55,27 +51,32 @@ export async function POST(req: NextRequest) {
     }
 
     // Prisma
-    let updateOrderResponse: updateOrderResponse;
+    let updateOrderResponse: UpdatePaidOrderResponse;
     try {
-      updateOrderResponse = await updateOrder(fullname, email, zapReceipt);
+      updateOrderResponse = await updatePaidOrder(
+        fullname,
+        email,
+        zapReceipt,
+        code || null
+      );
     } catch (error: any) {
       throw new AppError('Failed to update order', 500);
     }
 
     // AWS SES
-    try {
-      await ses.sendEmailOrder(email, updateOrderResponse.ticketId);
-    } catch (error: any) {
-      throw new AppError('Failed to send order email', 500);
+    if (!updateOrderResponse.alreadyPaid) {
+      try {
+        for (const ticket of updateOrderResponse.tickets) {
+          await ses.sendEmailOrder(email, ticket.ticketId!); // TODO: send one email with all tickets
+        }
+      } catch (error: any) {
+        throw new AppError('Failed to send order email', 500);
+      }
     }
 
     // Response
-    const response: TicketClaimResponse = {
-      fullname,
-      email,
-      orderReferenceId: updateOrderResponse.referenceId,
-      qty: updateOrderResponse.qty,
-      totalMiliSats: updateOrderResponse.totalMiliSats,
+    const response: OrderClaimResponse = {
+      claim: true,
     };
 
     return NextResponse.json({

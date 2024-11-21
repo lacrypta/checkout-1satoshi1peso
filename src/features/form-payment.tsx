@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { decodeInvoice } from '@lawallet/react';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/animations/loading';
+import { toast } from '@/hooks/use-toast';
 
 interface FormPaymentProps {
   invoice?: string;
@@ -65,9 +66,15 @@ export function FormPayment({ invoice }: FormPaymentProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(invoice!);
-      alert('Text copied to clipboard'); // TODO: use lawallet notification
+      return toast({
+        title: 'Copied to clipboard',
+      });
     } catch (error: any) {
-      alert('Failed to copy text: ' + error.message); // TODO: use lawallet notification
+      return toast({
+        title: 'Failed to copy text',
+        description: error.message,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -79,7 +86,11 @@ export function FormPayment({ invoice }: FormPaymentProps) {
       await window.webln.enable();
       await window.webln.sendPayment(invoice!);
     } catch (error: any) {
-      alert('Error paying invoice: ' + error.message); // TODO: use lawallet notification
+      return toast({
+        title: 'Error paying invoice',
+        description: error.message,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -135,11 +146,16 @@ export function FormPayment({ invoice }: FormPaymentProps) {
                     variant="secondary"
                     className="w-full"
                     onClick={payWithWebLN}
+                    disabled={!Boolean(invoice)}
                   >
                     Pay with wallet
                   </Button>
                 )}
-                <Button className="w-full" onClick={handleCopy}>
+                <Button
+                  className="w-full"
+                  onClick={handleCopy}
+                  disabled={!Boolean(invoice)}
+                >
                   Copy
                 </Button>
               </div>
