@@ -25,7 +25,7 @@ class SESClient implements SESClientInterface {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tu Entrada para el 1 Satoshi = 1 Peso</title>
+        <title>Tu Entrada para 1 Satoshi = 1 Peso</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -113,7 +113,7 @@ class SESClient implements SESClientInterface {
           <div class="logo-container">
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
-          <h1>Tu entrada para el 1 Satoshi = 1 Peso</h1>
+          <h1>Tu entrada para 1 Satoshi = 1 Peso</h1>
           <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Viernes 29 de Noviembre<br>⏰ A partir de las 19:00 hs.</p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
