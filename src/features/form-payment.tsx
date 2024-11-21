@@ -159,6 +159,21 @@ export function FormPayment({ invoice }: FormPaymentProps) {
                   Copy
                 </Button>
               </div>
+              <div className="text-sm mt-1">
+                <p>
+                  Esta invoice debe ser pagada con Bitcoin (Lightning Network).
+                </p>
+                <p>
+                  Si tenes problemas pedí AYUDA en{' '}
+                  <a
+                    className="font-bold hover:text-primary"
+                    href="https://linktr.ee/LaCryptaOk"
+                    target="_blank"
+                  >
+                    nuestras redes
+                  </a>
+                </p>
+              </div>
             </TabsContent>
             <TabsContent value="onchain">
               <Card>
