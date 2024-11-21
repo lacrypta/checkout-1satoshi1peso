@@ -98,7 +98,7 @@ export function FormCustomer({
     <>
       <div className="flex-1 flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="font-bold text-2xl">Information</h2>
+          <h2 className="font-bold text-2xl">Información</h2>
           <p className="text-text">
             Completá la información para recibir tu entrada.
           </p>
@@ -108,13 +108,13 @@ export function FormCustomer({
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Nombre</Label>
                   <Input
                     type="text"
                     id="fullname"
                     name="fullname"
                     minLength={3}
-                    placeholder="Your alias"
+                    placeholder="Tu nombre completo"
                     required
                     onChange={(e) => setFullname(e.target.value)}
                     defaultValue={fullname}
@@ -126,14 +126,14 @@ export function FormCustomer({
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="Your real mail"
+                    placeholder="Tu e-mail real"
                     required
                     onChange={(e) => setEmail(e.target.value)}
                     defaultValue={email}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="code">Code</Label>
+                  <Label htmlFor="code">Código de Descuento</Label>
                   <div className="relative">
                     <Input
                       type="text"
@@ -176,16 +176,16 @@ export function FormCustomer({
                       htmlFor="newsletter"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Subscribe to the newsletter
+                      Suscribirse al newsletter
                     </label>
-                    <p className="text-sm text-text">
+                    <p className="text-sm text-text hidden">
                       You agree to our Terms of Service and Privacy Policy.
                     </p>
                   </div>
                 </div>
               </div>
               <Button type="submit" disabled={loading || maxTicketsReached}>
-                {loading ? 'Generando ticket' : 'Confirm order'}
+                {loading ? 'Generando ticket' : 'Reservar'}
               </Button>
             </form>
             {message && <p className="text-center text-sm mt-2">{message}</p>}

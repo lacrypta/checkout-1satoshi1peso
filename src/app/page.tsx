@@ -53,7 +53,8 @@ import { useRelay } from '@/hooks/useRelay';
 // Mock data
 const TICKET = {
   title: '1 Satoshi = 1 Peso',
-  subtitle: 'Venite a festejar a La Crypta',
+  subtitle: 'Venite a festejar a La Crypta (Belgrano, CABA)',
+  date: 'Viernes 29 de Noviembre - 19:00hs',
   description: [
     'Barra completa',
     'Parrila',
@@ -376,6 +377,7 @@ export default function Page() {
                       {TICKET.subtitle}
                     </CardTitle>
                     <CardContent>
+                      <div className="mt-2">{TICKET.date}</div>
                       <ul className="list-disc pl-5 mt-4 text-sm">
                         {TICKET.description.map((item, index) => (
                           <li key={index}>{item}</li>
@@ -590,7 +592,7 @@ export default function Page() {
                           screen === 'information' ? 'text-white' : 'text-text'
                         )}
                       >
-                        Information
+                        Información
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -601,7 +603,7 @@ export default function Page() {
                           screen === 'payment' ? 'text-white' : 'text-text'
                         )}
                       >
-                        Payment
+                        Pago
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -612,7 +614,7 @@ export default function Page() {
                           screen === 'summary' ? 'text-white' : 'text-text'
                         )}
                       >
-                        Summary
+                        Resumen
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>
@@ -637,10 +639,10 @@ export default function Page() {
                   <div className="flex-1 flex flex-col items-center justify-center gap-4 w-full mx-auto py-12 px-8">
                     <CreditCardValidationIcon className="w-8 h-8" />
                     <div className="flex flex-col gap-2 text-center">
-                      <h2 className="font-bold text-2xl">Congratulation!</h2>
+                      <h2 className="font-bold text-2xl">Felicitaciones!</h2>
                       <p className="text-text">
-                        Your payment has been confirmed. We have sent the event
-                        details to your email.
+                        Tu pago fué confirmado. Te enviamos los detalles a tu
+                        casilla de e-mail.
                       </p>
                     </div>
                   </div>
@@ -651,7 +653,7 @@ export default function Page() {
                     variant="link"
                     onClick={backToPage}
                   >
-                    Back to page
+                    Volver
                   </Button>
                 </Link>
               </>
