@@ -46,7 +46,8 @@ export async function POST(req: NextRequest) {
       )
     );
     const totalMiliSats =
-      (await calculateTicketPrice(ticketQuantity, ticketPriceArs)) * 1000;
+      Math.floor(await calculateTicketPrice(ticketQuantity, ticketPriceArs)) *
+      1000;
 
     try {
       orderResponse = await createOrder(
