@@ -8,6 +8,8 @@ import {
 import { ses } from '@/services/ses';
 import { NextRequest, NextResponse } from 'next/server';
 import { getPublicKey, validateEvent } from 'nostr-tools';
+import * as Sentry from '@sentry/nextjs';
+import { isSentryEnabled } from '@/config/sentry';
 
 interface OrderClaimResponse {
   claim: boolean;
@@ -84,6 +86,8 @@ export async function POST(req: NextRequest) {
       data: response,
     });
   } catch (error: any) {
+    if (isSentryEnabled) Sentry.captureException(error);
+
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },
       { status: error.statusCode || 500 }

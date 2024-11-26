@@ -1,12 +1,12 @@
+import { AppError } from '@/lib/errors/appError';
+import { checkInTicket } from '@/lib/utils/prisma';
 import {
   checkInEventSchema,
   validateTicketEvent,
 } from '@/lib/validation/nostrEventSchema';
-import { AppError } from '@/lib/errors/appError';
-import { prisma } from '@/services/prismaClient';
-import { Order, Ticket, User } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { checkInTicket } from '@/lib/utils/prisma';
+import * as Sentry from '@sentry/nextjs';
+import { isSentryEnabled } from '@/config/sentry';
 
 interface CheckInResponse {
   checkIn: boolean;
@@ -57,6 +57,8 @@ export async function POST(req: NextRequest) {
       data,
     });
   } catch (error: any) {
+    if (isSentryEnabled) Sentry.captureException(error);
+
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },
       { status: error.statusCode || 500 }
