@@ -6,7 +6,6 @@ import {
 } from '@/lib/validation/nostrEventSchema';
 import { NextRequest, NextResponse } from 'next/server';
 import * as Sentry from '@sentry/nextjs';
-import { isSentryEnabled } from '@/config/sentry';
 
 interface CheckInResponse {
   checkIn: boolean;
@@ -57,7 +56,7 @@ export async function POST(req: NextRequest) {
       data,
     });
   } catch (error: any) {
-    if (isSentryEnabled) Sentry.captureException(error);
+    Sentry.captureException(error);
 
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },

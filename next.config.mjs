@@ -29,6 +29,7 @@ const configWithSentry = withSentryConfig(nextConfig, {
   project: 'checkout-btc',
   authToken: process.env.SENTRY_AUTH_TOKEN,
   silent: false,
+  telemetry: false,
 });
 
 export default configWithSentry;

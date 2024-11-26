@@ -10,7 +10,6 @@ import { ses } from '@/services/ses';
 import { NextRequest, NextResponse } from 'next/server';
 import { Event } from 'nostr-tools';
 import * as Sentry from '@sentry/nextjs';
-import { isSentryEnabled } from '@/config/sentry';
 
 interface RequestTicketResponse {
   pr: string;
@@ -172,7 +171,7 @@ export async function POST(req: NextRequest) {
       data: response,
     });
   } catch (error: any) {
-    if (isSentryEnabled) Sentry.captureException(error);
+    Sentry.captureException(error);
 
     const statusCode = error.statusCode || 500;
     return NextResponse.json(
