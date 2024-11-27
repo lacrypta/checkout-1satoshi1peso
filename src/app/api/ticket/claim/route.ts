@@ -15,12 +15,14 @@ interface OrderClaimResponse {
 }
 
 export async function POST(req: NextRequest) {
+  let body;
+
   try {
     if (req.method !== 'POST') {
       throw new AppError('Method not allowed', 405);
     }
 
-    const body = await req.json();
+    body = await req.json();
 
     // Zod
     const result = orderClaimSchema.safeParse(body);
@@ -85,7 +87,7 @@ export async function POST(req: NextRequest) {
       data: response,
     });
   } catch (error: any) {
-    Sentry.captureException(error);
+    Sentry.captureException(error, { extra: body });
 
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },
