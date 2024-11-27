@@ -1,6 +1,7 @@
 import { countTotalTickets } from '@/lib/utils/prisma';
 import { AppError } from '@/lib/errors/appError';
 import { NextRequest, NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
       data: { totalTickets },
     });
   } catch (error: any) {
-    console.error('Error counting tickets:', error);
+    Sentry.captureException(error);
 
     return NextResponse.json({
       status: false,

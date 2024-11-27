@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import { withSentryConfig } from '@sentry/nextjs';
+
 const nextConfig = {
   env: {
     NEXT_SIGNER_PRIVATE_KEY: process.env.SIGNER_PRIVATE_KEY,
@@ -22,4 +24,12 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const configWithSentry = withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: false,
+  telemetry: false,
+});
+
+export default configWithSentry;

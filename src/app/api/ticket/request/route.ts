@@ -9,6 +9,7 @@ import { sendy } from '@/services/sendy';
 import { ses } from '@/services/ses';
 import { NextRequest, NextResponse } from 'next/server';
 import { Event } from 'nostr-tools';
+import * as Sentry from '@sentry/nextjs';
 
 interface RequestTicketResponse {
   pr: string;
@@ -170,6 +171,8 @@ export async function POST(req: NextRequest) {
       data: response,
     });
   } catch (error: any) {
+    Sentry.captureException(error);
+
     const statusCode = error.statusCode || 500;
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },

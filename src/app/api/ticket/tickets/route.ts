@@ -6,6 +6,7 @@ import {
   ticketsEventSchema,
 } from '@/lib/validation/nostrEventSchema';
 import { validateTicketEvent } from '@/lib/validation/nostrEventSchema';
+import * as Sentry from '@sentry/nextjs';
 
 const prisma = new PrismaClient();
 
@@ -86,6 +87,8 @@ export async function POST(req: NextRequest) {
       data: formattedTickets,
     });
   } catch (error: any) {
+    Sentry.captureException(error);
+
     return NextResponse.json(
       { status: false, errors: error.message || 'Internal Server Error' },
       { status: error.statusCode || 500 }
