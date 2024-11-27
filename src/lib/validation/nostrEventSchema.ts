@@ -57,7 +57,7 @@ export const checkInEventSchema = z.object({
 });
 
 export const inviteEventContentSchema = z.object({
-  action: z.literal('add' || 'remove'),
+  action: z.enum(['add', 'remove']),
   list: z.array(z.array(z.string(), z.string())),
 });
 
