@@ -218,6 +218,51 @@ export default function AdminPage() {
     [privateKey]
   );
 
+  const handleEmailTicket = useCallback(async (ticketId: string) => {
+    console.log('Email ticket', ticketId);
+
+    try {
+      const unsignedAuthEvent: EventTemplate = {
+        kind: 27241,
+        tags: [] as string[][],
+        content: JSON.stringify({ ticket_id: ticketId }),
+        created_at: Math.round(Date.now() / 1000),
+      };
+
+      const privKey = Uint8Array.from(Buffer.from(privateKey, 'hex'));
+      const authEvent: Event = finalizeEvent(unsignedAuthEvent, privKey);
+
+      const response = await fetch('/api/ticket/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ authEvent }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || response.statusText);
+      }
+
+      toast({
+        title: 'Success',
+        description: `Ticket ${ticketId} emailed successfully`,
+        variant: 'default',
+        duration: 5000,
+      });
+
+    } catch (error: any) {
+      console.error('Error:', error.message);
+      toast({
+        title: 'Error',
+        description: `Failed to check in ticket ${ticketId}`,
+        variant: 'destructive',
+        duration: 5000,
+      });
+    }
+  }, [privateKey]);
+
   const handleCheckInAlert = () => {
     setCheckInResult('idle');
   };
@@ -248,7 +293,7 @@ export default function AdminPage() {
   };
 
   const columns = React.useMemo(
-    () => createColumns(handleCheckIn),
+    () => createColumns(handleCheckIn, handleEmailTicket),
     [handleCheckIn]
   );
 
