@@ -218,6 +218,11 @@ export default function AdminPage() {
     [privateKey]
   );
 
+  const handleEmailTicket = useCallback(async (ticketId: string) => {
+    console.log('Email ticket', ticketId);
+    alert('Not implemented yet');
+  }, []);
+
   const handleCheckInAlert = () => {
     setCheckInResult('idle');
   };
@@ -248,7 +253,7 @@ export default function AdminPage() {
   };
 
   const columns = React.useMemo(
-    () => createColumns(handleCheckIn),
+    () => createColumns(handleCheckIn, handleEmailTicket),
     [handleCheckIn]
   );
 

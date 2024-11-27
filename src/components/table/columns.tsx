@@ -23,7 +23,8 @@ export type TicketInfo = {
 };
 
 export const createColumns = (
-  handleCheckIn: (ticketId: string) => void
+  handleCheckIn: (ticketId: string) => void,
+  handleEmailTicket: (ticketId: string) => void
 ): ColumnDef<TicketInfo>[] => [
   {
     accessorKey: 'ticketId',
@@ -98,6 +99,11 @@ export const createColumns = (
               onClick={() => navigator.clipboard.writeText(order.ticketId)}
             >
               Copy ticket ID
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleEmailTicket(order.ticketId)}
+            >
+              Email Ticket
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
