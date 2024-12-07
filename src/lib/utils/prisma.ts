@@ -110,7 +110,7 @@ async function updatePaidOrder(
         });
       }
 
-      if (!order || !user) {
+      if (!order || !order.userId) {
         throw new Error('Order or user not found, cannot create ticket');
       }
 
@@ -123,7 +123,7 @@ async function updatePaidOrder(
         const ticket: Ticket | null = await prisma.ticket.create({
           data: {
             ticketId,
-            userId: user.id,
+            userId: order.userId,
             orderId: order.id,
           },
         });
@@ -139,7 +139,7 @@ async function updatePaidOrder(
     return { tickets: [], alreadyPaid };
   }
 
-  if (!order || !user || tickets.length === 0) {
+  if (!order || tickets.length === 0) {
     throw new Error('Order or user not found or ticket not created');
   }
 
