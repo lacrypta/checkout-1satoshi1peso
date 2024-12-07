@@ -52,16 +52,16 @@ import { useRelay } from '@/hooks/useRelay';
 
 // Mock data
 const TICKET = {
-  title: '1 Satoshi = 1 Peso',
+  title: 'Fin de año La Crypta',
   subtitle: 'Venite a festejar a La Crypta (Belgrano, CABA)',
-  date: 'Viernes 29 de Noviembre - 19:00hs',
+  date: 'Sábado 21 de Diciembre - 21:00hs',
   description: [
     'Barra completa',
-    'Parrila',
+    'Varias opciones de comida',
     'Música',
     'Presentaciones',
     'Bitcoiners',
-    'Libertarios',
+    'Newbies',
   ],
   imageUrl: 'https://placehold.co/400',
   value: parseInt(process.env.NEXT_TICKET_PRICE_ARS!),

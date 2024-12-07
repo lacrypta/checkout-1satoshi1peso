@@ -377,7 +377,7 @@ export default function AdminPage() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Orders</CardTitle>
+          <CardTitle>Tickets</CardTitle>
           <CardDescription>Manage and view ticket orders</CardDescription>
           <div className="flex space-x-2">
             <Input

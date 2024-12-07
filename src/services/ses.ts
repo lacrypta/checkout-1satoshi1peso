@@ -113,8 +113,8 @@ class SESClient implements SESClientInterface {
           <div class="logo-container">
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
-          <h1>Tu entrada para 1 Satoshi = 1 Peso</h1>
-          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Viernes 29 de Noviembre<br>⏰ A partir de las 19:00 hs.</p>
+          <h1>Tu entrada para la Fiesta de Fin de Año</h1>
+          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Sábado 21 de Diciembre<br>⏰ A partir de las 21:00 hs.</p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
           </div>
@@ -140,7 +140,7 @@ class SESClient implements SESClientInterface {
       Content: {
         Simple: {
           Subject: {
-            Data: 'Tu entrada para 1 Satoshi = 1 Peso',
+            Data: 'Tu entrada para Fin de Año 2024',
           },
           Body: {
             Html: {
