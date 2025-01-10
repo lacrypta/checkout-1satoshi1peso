@@ -52,21 +52,18 @@ import { useRelay } from '@/hooks/useRelay';
 
 // Mock data
 const TICKET = {
-  title: 'Fin de año La Crypta',
-  subtitle: 'Venite a festejar a La Crypta (Belgrano, CABA)',
-  date: 'Sábado 21 de Diciembre - 21:00hs',
+  title: 'PANCHITOS PARTY',
+  subtitle: 'Traete a tu amigo normie a festejar a La Crypta',
+  date: 'Viernes 17 de Enero - 20:00hs hasta las 02:00hs',
   description: [
-    'Barra completa',
-    'Hamburguesas',
-    'Pochoclos + algodón de azucar',
+    'PANCHOS 🌭',
     'Entretenimiento',
-    'Photobooth',
     'Presentaciones',
     'Bitcoiners',
-    'Newbie friendly',
+    'No sabes nada de Bitcoin pero te interesa? Vení!',
   ],
   imageUrl: 'https://placehold.co/400',
-  value: parseInt(process.env.NEXT_TICKET_PRICE_ARS!),
+  value: parseInt(process.env.NEXT_TICKET_PRICE_ARS || '1'), // Updated ticket price
   valueType: 'SAT',
 };
 
@@ -85,7 +82,7 @@ export default function Page() {
   );
   const [totalSats, setTotalSats] = useState<number>(0);
   const [ticketPriceARS, setTicketPriceARS] = useState<number>(TICKET.value);
-  const [ticketQuantity, setTicketQuantity] = useState<number>(1);
+  const [ticketQuantity, setTicketQuantity] = useState<number>(1); // Set initial ticket quantity to 1
   const [paymentRequest, setPaymentRequest] = useState<string | undefined>(
     undefined
   );
@@ -287,7 +284,7 @@ export default function Page() {
     const calculatePrices = async () => {
       try {
         // Calculate discounted price in ARS
-        const discountedPriceARS = Math.round(TICKET.value * discountMultiple);
+        const discountedPriceARS = Math.round((TICKET.value) * discountMultiple);
         setTicketPriceARS(discountedPriceARS);
 
         // Calculate total in SATs
@@ -375,9 +372,8 @@ export default function Page() {
                 <Card className="p-4 bg-background">
                   <div className="flex flex-col items-center">
                     <CardTitle>{TICKET.title}</CardTitle>
-                    <CardTitle className="text-base mt-2">
-                      {TICKET.subtitle}
-                    </CardTitle>
+                    <CardTitle className="text-base mt-2">{TICKET.subtitle} </CardTitle>
+                    <CardTitle className="text-sm mt-2">Villanueva 1367, CABA</CardTitle>
                     <CardContent>
                       <div className="mt-2">{TICKET.date}</div>
                       <ul className="list-disc pl-5 mt-4 text-sm">
@@ -416,7 +412,7 @@ export default function Page() {
                         <div className="flex gap-2 items-center">
                           <Button
                             variant={
-                              screen !== 'information' || ticketQuantity === 1
+                              screen !== 'information' || ticketQuantity === 1 // Change minimum ticket quantity to 1
                                 ? 'ghost'
                                 : 'secondary'
                             }
@@ -425,7 +421,7 @@ export default function Page() {
                               setTicketQuantity(ticketQuantity - 1)
                             }
                             disabled={
-                              screen !== 'information' || ticketQuantity === 1
+                              screen !== 'information' || ticketQuantity === 1 // Change minimum ticket quantity to 1
                             }
                           >
                             <MinusIcon />
