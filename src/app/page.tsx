@@ -64,7 +64,7 @@ const TICKET = {
   ],
   imageUrl: 'https://placehold.co/400',
   value: parseInt(process.env.NEXT_TICKET_PRICE_ARS || '1'), // Updated ticket price
-  valueType: 'SAT',
+  valueType: 'ARS',
 };
 
 const MAX_TICKETS = parseInt(process.env.NEXT_MAX_TICKETS || '0', 10); // Get the max tickets from env
@@ -81,7 +81,7 @@ export default function Page() {
     undefined
   );
   const [totalSats, setTotalSats] = useState<number>(0);
-  const [ticketPriceARS, setTicketPriceARS] = useState<number>(TICKET.value);
+  const [ticketPriceSAT, setTicketPriceSAT] = useState<number>(TICKET.value);
   const [ticketQuantity, setTicketQuantity] = useState<number>(1); // Set initial ticket quantity to 1
   const [paymentRequest, setPaymentRequest] = useState<string | undefined>(
     undefined
@@ -283,13 +283,13 @@ export default function Page() {
   useEffect(() => {
     const calculatePrices = async () => {
       try {
-        // Calculate discounted price in ARS
-        const discountedPriceARS = Math.round((TICKET.value) * discountMultiple);
-        setTicketPriceARS(discountedPriceARS);
+        // Calculate discounted price in SAT
+        const discountedPriceSAT = Math.round((TICKET.value) * discountMultiple);
+        setTicketPriceSAT(discountedPriceSAT);
 
-        // Calculate total in SATs
+        // Calculate total in ARS
         const totalSATs = Math.round(
-          await calculateTicketPrice(ticketQuantity, discountedPriceARS)
+          await calculateTicketPrice(ticketQuantity, discountedPriceSAT)
         );
 
         setTotalSats(totalSATs);
@@ -394,11 +394,11 @@ export default function Page() {
                               {discountMultiple !== 1 && (
                                 <span className="line-through mr-2 text-text">
                                   {Math.round(
-                                    ticketPriceARS / discountMultiple
+                                    ticketPriceSAT / discountMultiple
                                   )}
                                 </span>
                               )}
-                              {ticketPriceARS} ARS
+                              {ticketPriceSAT} SAT
                             </>
                             {discountMultiple !== 1 && (
                               <span className="font-semibold text-sm text-primary">
@@ -499,7 +499,7 @@ export default function Page() {
                           <div>
                             <h2 className="text-md">{TICKET.title}</h2>
                             <p className="font-semibold text-lg">
-                              {ticketPriceARS} ARS
+                              {ticketPriceSAT} SAT
                             </p>
                           </div>
                           <div className="flex gap-2 items-center">
@@ -534,7 +534,7 @@ export default function Page() {
                       <div>
                         <h2 className="text-md">{TICKET.title}</h2>
                         <p className="font-semibold text-lg">
-                          {ticketPriceARS} ARS
+                          {ticketPriceSAT} SAT
                           {discountMultiple !== 1 && (
                             <span className="font-semibold text-sm text-primary">
                               {' '}
