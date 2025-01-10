@@ -359,7 +359,7 @@ export default function Page() {
     <>
       <div className="flex flex-col md:flex-row w-full min-h-[100dvh]">
         {/* Aside info */}
-        <aside className="bg-[url('../../public/background-1.png')] bg-cover bg-[center_top_-90px] relative flex justify-center items-center w-full min-h-full pt-[60px] md:pt-0">
+        <aside className="bg-[url('../../public/background-1.png')] bg-cover bg-[center_top_-100px] relative flex justify-center items-center w-full min-h-full pt-[60px] md:pt-0">
           <Navbar />
           <div
             className={cn(
@@ -369,7 +369,7 @@ export default function Page() {
           >
             {screen === 'information' ? (
               <>
-                <Card className="p-4 bg-background">
+                <Card className="p-4 bg-black bg-opacity-85">
                   <div className="flex flex-col items-center">
                     <CardTitle>{TICKET.title}</CardTitle>
                     <CardTitle className="text-base mt-2">{TICKET.subtitle} </CardTitle>
@@ -386,7 +386,7 @@ export default function Page() {
                 </Card>
                 {!maxTicketsReached && (
                   <>
-                    <Card className="p-4 bg-background mt-4">
+                    <Card className="p-4 bg-black bg-opacity-85 mt-4">
                       <div className="flex justify-between items-center gap-4">
                         <div>
                           <p className="font-semibold text-lg">
@@ -449,7 +449,7 @@ export default function Page() {
                         </div>
                       </div>
                     </Card>
-                    <Card className="bg-background">
+                    <Card className="bg-black bg-opacity-85">
                       <div className="p-4">
                         <div className="flex gap-4 justify-between items-center">
                           <p className="text-text">Total</p>
