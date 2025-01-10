@@ -64,7 +64,7 @@ const TICKET = {
   ],
   imageUrl: 'https://placehold.co/400',
   value: parseInt(process.env.NEXT_TICKET_PRICE_ARS || '1'), // Updated ticket price
-  valueType: 'SAT',
+  valueType: 'ARS',
 };
 
 const MAX_TICKETS = parseInt(process.env.NEXT_MAX_TICKETS || '0', 10); // Get the max tickets from env
@@ -81,7 +81,7 @@ export default function Page() {
     undefined
   );
   const [totalSats, setTotalSats] = useState<number>(0);
-  const [ticketPriceARS, setTicketPriceARS] = useState<number>(TICKET.value);
+  const [ticketPriceSAT, setTicketPriceSAT] = useState<number>(TICKET.value);
   const [ticketQuantity, setTicketQuantity] = useState<number>(1); // Set initial ticket quantity to 1
   const [paymentRequest, setPaymentRequest] = useState<string | undefined>(
     undefined
@@ -283,13 +283,13 @@ export default function Page() {
   useEffect(() => {
     const calculatePrices = async () => {
       try {
-        // Calculate discounted price in ARS
-        const discountedPriceARS = Math.round((TICKET.value) * discountMultiple);
-        setTicketPriceARS(discountedPriceARS);
+        // Calculate discounted price in SAT
+        const discountedPriceSAT = Math.round((TICKET.value) * discountMultiple);
+        setTicketPriceSAT(discountedPriceSAT);
 
-        // Calculate total in SATs
+        // Calculate total in ARS
         const totalSATs = Math.round(
-          await calculateTicketPrice(ticketQuantity, discountedPriceARS)
+          await calculateTicketPrice(ticketQuantity, discountedPriceSAT)
         );
 
         setTotalSats(totalSATs);
@@ -359,7 +359,7 @@ export default function Page() {
     <>
       <div className="flex flex-col md:flex-row w-full min-h-[100dvh]">
         {/* Aside info */}
-        <aside className="bg-[url('../../public/background-1.png')] bg-cover bg-[center_top_-90px] relative flex justify-center items-center w-full min-h-full pt-[60px] md:pt-0">
+        <aside className="bg-[url('../../public/background-1.png')] bg-cover bg-[center_top_-100px] relative flex justify-center items-center w-full min-h-full pt-[60px] md:pt-0">
           <Navbar />
           <div
             className={cn(
@@ -369,7 +369,7 @@ export default function Page() {
           >
             {screen === 'information' ? (
               <>
-                <Card className="p-4 bg-background">
+                <Card className="p-4 bg-black bg-opacity-85">
                   <div className="flex flex-col items-center">
                     <CardTitle>{TICKET.title}</CardTitle>
                     <CardTitle className="text-base mt-2">{TICKET.subtitle} </CardTitle>
@@ -386,7 +386,7 @@ export default function Page() {
                 </Card>
                 {!maxTicketsReached && (
                   <>
-                    <Card className="p-4 bg-background mt-4">
+                    <Card className="p-4 bg-black bg-opacity-85 mt-4">
                       <div className="flex justify-between items-center gap-4">
                         <div>
                           <p className="font-semibold text-lg">
@@ -394,11 +394,11 @@ export default function Page() {
                               {discountMultiple !== 1 && (
                                 <span className="line-through mr-2 text-text">
                                   {Math.round(
-                                    ticketPriceARS / discountMultiple
+                                    ticketPriceSAT / discountMultiple
                                   )}
                                 </span>
                               )}
-                              {ticketPriceARS} ARS
+                              {ticketPriceSAT} SAT
                             </>
                             {discountMultiple !== 1 && (
                               <span className="font-semibold text-sm text-primary">
@@ -449,7 +449,7 @@ export default function Page() {
                         </div>
                       </div>
                     </Card>
-                    <Card className="bg-background">
+                    <Card className="bg-black bg-opacity-85">
                       <div className="p-4">
                         <div className="flex gap-4 justify-between items-center">
                           <p className="text-text">Total</p>
@@ -499,7 +499,7 @@ export default function Page() {
                           <div>
                             <h2 className="text-md">{TICKET.title}</h2>
                             <p className="font-semibold text-lg">
-                              {ticketPriceARS} ARS
+                              {ticketPriceSAT} SAT
                             </p>
                           </div>
                           <div className="flex gap-2 items-center">
@@ -534,7 +534,7 @@ export default function Page() {
                       <div>
                         <h2 className="text-md">{TICKET.title}</h2>
                         <p className="font-semibold text-lg">
-                          {ticketPriceARS} ARS
+                          {ticketPriceSAT} SAT
                           {discountMultiple !== 1 && (
                             <span className="font-semibold text-sm text-primary">
                               {' '}
