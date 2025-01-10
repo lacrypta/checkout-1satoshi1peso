@@ -25,7 +25,7 @@ class SESClient implements SESClientInterface {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tu Entrada para 1 Satoshi = 1 Peso</title>
+        <title>Tu entrada para la Panchitos Party</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -113,7 +113,7 @@ class SESClient implements SESClientInterface {
           <div class="logo-container">
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
-          <h1>Tu entrada para la Fiesta de Fin de Año</h1>
+          <h1>Tu entrada para la Panchitos Party</h1>
           <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Sábado 21 de Diciembre<br>⏰ A partir de las 21:00 hs.</p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
@@ -140,7 +140,7 @@ class SESClient implements SESClientInterface {
       Content: {
         Simple: {
           Subject: {
-            Data: 'Tu entrada para Fin de Año 2024',
+            Data: 'Tu entrada para la Panchitos Party',
           },
           Body: {
             Html: {
