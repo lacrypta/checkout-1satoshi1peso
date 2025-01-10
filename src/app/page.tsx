@@ -80,7 +80,7 @@ export default function Page() {
   const [userData, setUserData] = useState<OrderUserData | undefined>(
     undefined
   );
-  const [totalSats, setTotalSats] = useState<number>(0);
+  const [totalMiliSats, setTotalMiliSats] = useState<number>(0);
   const [ticketPriceSAT, setTicketPriceSAT] = useState<number>(TICKET.value);
   const [ticketQuantity, setTicketQuantity] = useState<number>(1); // Set initial ticket quantity to 1
   const [paymentRequest, setPaymentRequest] = useState<string | undefined>(
@@ -288,11 +288,11 @@ export default function Page() {
         setTicketPriceSAT(discountedPriceSAT);
 
         // Calculate total in ARS
-        const totalSATs = Math.round(
+        const totalMiliSats = Math.round(
           await calculateTicketPrice(ticketQuantity, discountedPriceSAT)
         );
 
-        setTotalSats(totalSATs);
+        setTotalMiliSats(totalMiliSats);
       } catch (error: any) {
         console.error('Error calculating ticket prices:', error);
       }
@@ -455,14 +455,14 @@ export default function Page() {
                           <p className="text-text">Total</p>
                           <div className="text-right">
                             <p className="font-bold text-md">
-                              {totalSats ? (
+                              {totalMiliSats ? (
                                 <>
                                   {discountMultiple !== 1 && (
                                     <span className="line-through mr-2 text-text">
-                                      {Math.round(totalSats / discountMultiple)}
+                                      {Math.round(totalMiliSats / discountMultiple)}
                                     </span>
                                   )}
-                                  {totalSats} {TICKET.valueType}
+                                  {totalMiliSats} {TICKET.valueType}
                                 </>
                               ) : (
                                 'Calculating...'
@@ -487,8 +487,8 @@ export default function Page() {
                       <div className="flex items-center justify-between gap-2 w-full">
                         Show order summary
                         <p className="font-bold text-lg no-underline">
-                          {totalSats
-                            ? totalSats + ' ' + TICKET.valueType
+                          {totalMiliSats
+                            ? totalMiliSats + ' ' + TICKET.valueType
                             : 'Calculating...'}
                         </p>
                       </div>
@@ -517,8 +517,8 @@ export default function Page() {
                           <p className="text-text text-md">Total</p>
                           <div className="text-right">
                             <p className="font-bold text-md">
-                              {totalSats
-                                ? `${totalSats} ${TICKET.valueType}`
+                              {totalMiliSats
+                                ? `${totalMiliSats} ${TICKET.valueType}`
                                 : 'Calculating...'}
                             </p>
                           </div>
@@ -561,10 +561,10 @@ export default function Page() {
                             <>
                               {discountMultiple !== 1 && (
                                 <span className="line-through mr-2 text-text">
-                                  {Math.round(totalSats / discountMultiple)}
+                                  {Math.round(totalMiliSats / discountMultiple)}
                                 </span>
                               )}
-                              {totalSats} {TICKET.valueType}
+                              {totalMiliSats} {TICKET.valueType}
                             </>
                           </p>
                         </div>

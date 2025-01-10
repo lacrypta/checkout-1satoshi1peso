@@ -41,15 +41,14 @@ export async function POST(req: NextRequest) {
     const discountMultiple = code
       ? await getCodeDiscountBack(code.toLowerCase())
       : 1;
-    const ticketPriceArs = parseInt(
-      (parseInt(process.env.NEXT_TICKET_PRICE_ARS!) * discountMultiple).toFixed(
-        0
-      )
-    );
-    const totalMiliSats =
-      Math.floor(await calculateTicketPrice(ticketQuantity, ticketPriceArs)) *
-      1000;
-
+      const ticketPriceArs = parseInt(
+        (parseInt(process.env.NEXT_TICKET_PRICE_ARS!) * discountMultiple).toFixed(
+          0
+        )
+      );
+      console.log(ticketPriceArs);
+      const totalMiliSats = ticketPriceArs*ticketQuantity*1000;
+      console.log(totalMiliSats);
     try {
       orderResponse = await createOrder(
         fullname,
