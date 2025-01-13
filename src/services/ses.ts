@@ -114,7 +114,7 @@ class SESClient implements SESClientInterface {
             <img src='https://raw.githubusercontent.com/lacrypta/branding/main/iso/isologo-white.png' alt='la-crypta-logo'>
           </div>
           <h1>Tu entrada para la Panchitos Party</h1>
-          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Sábado 21 de Diciembre<br>⏰ A partir de las 21:00 hs.</p>
+          <p>Te esperamos en: <br>📍 Villanueva 1367, Belgrano, CABA. <br>📅 Viernes 17 de Enero<br>⏰ A partir de las 20:00 hs.</p>
           <div class="qr-code">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}" alt="QR Code">
           </div>
