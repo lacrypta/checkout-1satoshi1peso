@@ -49,6 +49,7 @@ import { useNostr, useSubscription } from '@lawallet/react';
 import { convertEvent } from '../lib/utils/nostr';
 import { calculateTicketPrice } from '../lib/utils/price';
 import { useRelay } from '@/hooks/useRelay';
+import { GitHubLogo } from '@/components/github';
 
 // Mock data
 const TICKET = {
@@ -659,6 +660,11 @@ export default function Page() {
             )}
           </div>
         </section>
+      </div>
+      <div className={`fixed bottom-2 inset-x-0 flex justify-center lg:justify-end lg:pr-4`}>
+        <a href="https://github.com/lacrypta/checkout-1satoshi1peso">
+          <GitHubLogo />
+        </a>
       </div>
 
       <AlertDialog open={isOpen} onOpenChange={setOpenAlert}>
