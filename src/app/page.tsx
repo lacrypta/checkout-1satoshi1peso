@@ -63,7 +63,7 @@ const TICKET = {
     'No sabes nada de Bitcoin pero te interesa? Vení!',
   ],
   imageUrl: 'https://placehold.co/400',
-  value: parseInt(process.env.NEXT_TICKET_PRICE_ARS || '1'), // Updated ticket price
+  value: parseInt(process.env.NEXT_TICKET_PRICE_SATS || '1'), // Updated ticket price
   valueType: 'ARS',
 };
 
