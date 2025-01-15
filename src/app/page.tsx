@@ -54,13 +54,14 @@ import { useRelay } from '@/hooks/useRelay';
 const TICKET = {
   title: 'PANCHITOS PARTY',
   subtitle: 'Traete a tu amigo normie a festejar a La Crypta',
+  address: 'Villanueva 1367, CABA',
   date: 'Viernes 17 de Enero - 20:00hs hasta las 02:00hs',
   description: [
     'PANCHOS 🌭',
     'Entretenimiento',
     'Presentaciones',
     'Bitcoiners',
-    'No sabes nada de Bitcoin pero te interesa? Vení!',
+    '¿No sabes nada de Bitcoin pero te interesa?\n¡VENí!',
   ],
   imageUrl: 'https://placehold.co/400',
   value: parseInt(process.env.NEXT_TICKET_PRICE_SATS || '1'), // Updated ticket price
@@ -372,8 +373,8 @@ export default function Page() {
                 <Card className="p-4 bg-black bg-opacity-85">
                   <div className="flex flex-col items-center">
                     <CardTitle>{TICKET.title}</CardTitle>
-                    <CardTitle className="text-base mt-2">{TICKET.subtitle} </CardTitle>
-                    <CardTitle className="text-sm mt-2">Villanueva 1367, CABA</CardTitle>
+                    <CardTitle className="text-base mt-2 italic">{TICKET.subtitle} </CardTitle>
+                    <CardTitle className="font-normal text-base mt-2">{TICKET.address}</CardTitle>
                     <CardContent>
                       <div className="mt-2">{TICKET.date}</div>
                       <ul className="list-disc pl-5 mt-4 text-sm">
@@ -398,7 +399,7 @@ export default function Page() {
                                   )}
                                 </span>
                               )}
-                              {ticketPriceSAT} SAT
+                              <p className='text-orange-300'>{ticketPriceSAT} SAT</p>
                             </>
                             {discountMultiple !== 1 && (
                               <span className="font-semibold text-sm text-primary">
@@ -462,7 +463,7 @@ export default function Page() {
                                       {Math.round(totalMiliSats / discountMultiple)}
                                     </span>
                                   )}
-                                  {totalMiliSats} {TICKET.valueType}
+                                  <p className='text-green-300'>{totalMiliSats} {TICKET.valueType}</p>
                                 </>
                               ) : (
                                 'Calculating...'
