@@ -65,7 +65,7 @@ const TICKET = {
     '¿No sabes nada de Bitcoin pero te interesa?\n¡VENí!',
   ],
   imageUrl: 'https://placehold.co/400',
-  value: parseInt(process.env.NEXT_TICKET_PRICE_SATS || '1'), // Updated ticket price
+  value: parseInt(process.env.NEXT_TICKET_PRICE_ARS || '1'), // Updated ticket price
   valueType: 'ARS',
 };
 
@@ -289,7 +289,7 @@ export default function Page() {
         const discountedPriceSAT = Math.round((TICKET.value) * discountMultiple);
         setTicketPriceSAT(discountedPriceSAT);
 
-        // Calculate total in ARS
+        // Calculate total in SAT
         const totalMiliSats = Math.round(
           await calculateTicketPrice(ticketQuantity, discountedPriceSAT)
         );
