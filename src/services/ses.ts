@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-sesv2';
 import { SESClientInterface } from '../types/ses';
 
-console.log('');
+console.log(' ');
 
 class SESClient implements SESClientInterface {
   private client: SESv2Client;
